@@ -18,7 +18,7 @@ class NgrokLauncher:
 
     def setup_ui(self):
         """Initialize the Ngrok Launcher UI components."""
-        self.root.title(f"Ngrok Launcher - v1.3.0")
+        self.root.title(f"Ngrok Launcher - v1.0.0")
 
         # Port input
         self.label_port = tk.Label(self.root, text="Port:")
