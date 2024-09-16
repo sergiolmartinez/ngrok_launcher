@@ -1,0 +1,32 @@
+# Python bytecode files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+.venv/
+env/
+ENV/
+
+# Log files
+*.log
+ngrok_gui_logs/
+
+# PyInstaller or cx_Freeze build files
+dist/
+build/
+*.spec
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Unit test coverage reports
+htmlcov/
+.coverage
+*.cover
+
+# Miscellaneous
+*.swp
+.idea/
+.vscode/
