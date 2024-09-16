@@ -1,8 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 import webbrowser  # To open URLs in the default web browser
-# Import get_ngrok_info here
-from ngrok_manager import start_ngrok, stop_ngrok, get_ngrok_info
+from ngrok_manager import start_ngrok, stop_ngrok, get_ngrok_url_with_retries
 from config_manager import load_last_config, save_config
 from logger import logger
 
@@ -73,24 +72,15 @@ class NgrokLauncher:
         """Update the status label."""
         self.status_label.config(text=f"Ngrok status: {status}", fg=color)
 
-    def update_tunnel_info(self, info=None):
-        """Update the displayed Ngrok public URL and other tunnel info."""
-        if info:
-            url = info.get('public_url')
-            requests = info.get('requests_count', 0)
-            status = info.get('status', 'Unknown')
-
+    def update_url(self, url=None):
+        """Update the displayed Ngrok public URL."""
+        self.ngrok_info = url
+        if url:
             self.url_label.config(
                 text=f"Ngrok URL: {url}", fg="green", cursor="hand2")
-            self.info_label.config(
-                text=f"Requests: {requests} | Status: {status}", fg="green")
-            self.ngrok_info = url
         else:
             self.url_label.config(
                 text="Ngrok URL: Not available", fg="red", cursor="")
-            self.info_label.config(
-                text="Requests: 0 | Status: Unknown", fg="green")
-            self.ngrok_info = None
 
     def open_url(self, event):
         """Open the Ngrok URL in the default web browser when clicked."""
@@ -108,12 +98,12 @@ class NgrokLauncher:
             save_config(port, self.entry_domain.get())
             self.update_status("Running", "green")
 
-            # Fetch the public URL and tunnel info from Ngrok
-            info = get_ngrok_info()
-            if info:
-                self.update_tunnel_info(info)
+            # Fetch the public URL from Ngrok with retries
+            url = get_ngrok_url_with_retries()
+            if url:
+                self.update_url(url)
             else:
-                self.update_tunnel_info(None)
+                self.update_url(None)
 
         except FileNotFoundError as e:
             messagebox.showerror("Error", str(e))
@@ -137,12 +127,12 @@ class NgrokLauncher:
             save_config(port, domain)
             self.update_status("Running", "green")
 
-            # Fetch the public URL and tunnel info from Ngrok
-            info = get_ngrok_info()
-            if info:
-                self.update_tunnel_info(info)
+            # Fetch the public URL from Ngrok with retries
+            url = get_ngrok_url_with_retries()
+            if url:
+                self.update_url(url)
             else:
-                self.update_tunnel_info(None)
+                self.update_url(None)
 
         except FileNotFoundError as e:
             messagebox.showerror("Error", str(e))
@@ -156,7 +146,7 @@ class NgrokLauncher:
         try:
             stop_ngrok()
             self.update_status("Stopped", "red")
-            self.update_tunnel_info(None)
+            self.update_url(None)
         except Exception as e:
             messagebox.showerror("Error", f"Failed to stop Ngrok: {str(e)}")
             logger.error(f"Failed to stop Ngrok: {str(e)}")
