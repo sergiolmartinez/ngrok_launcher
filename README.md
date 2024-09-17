@@ -39,7 +39,7 @@ The main dependencies are:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/ngrok-launcher.git
+   git clone https://github.com/sergiolmartinez/ngrok_launcher.git
    cd ngrok-launcher
    ```
 
