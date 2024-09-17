@@ -88,16 +88,6 @@ To package this app as a standalone executable using **PyInstaller**, follow the
 
 This will generate a `dist/` directory with the standalone executable.
 
-## .gitignore
-
-The project includes a `.gitignore` file to exclude unnecessary files like:
-
-- Python bytecode (`*.pyc`, `__pycache__/`).
-- Virtual environment (`.venv/`).
-- Log files.
-- Build artifacts from PyInstaller (`dist/`, `build/`).
-- OS-specific files like `.DS_Store` (macOS) and `Thumbs.db` (Windows).
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
